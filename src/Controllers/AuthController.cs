@@ -4,6 +4,7 @@ namespace Codecool.PeerMentors.Controllers
     using Codecool.PeerMentors.DTOs.Requests;
     using Codecool.PeerMentors.Entities;
     using Codecool.PeerMentors.Services;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("[controller]")]
@@ -16,6 +17,7 @@ namespace Codecool.PeerMentors.Controllers
             this.authService = authService;
         }
 
+        [AllowAnonymous]
         [HttpPost("google")]
         public async Task<IActionResult> Google([FromBody] GoogleUser account)
         {
