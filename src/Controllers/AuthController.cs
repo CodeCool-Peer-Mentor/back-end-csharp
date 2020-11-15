@@ -2,6 +2,7 @@ namespace Codecool.PeerMentors.Controllers
 {
     using System.Threading.Tasks;
     using Codecool.PeerMentors.DTOs.Requests;
+    using Codecool.PeerMentors.Entities;
     using Codecool.PeerMentors.Services;
     using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,8 @@ namespace Codecool.PeerMentors.Controllers
         [HttpPost("google")]
         public async Task<IActionResult> Google([FromBody] GoogleUser account)
         {
-            await authService.Authenticate(account);
+            User user = await authService.Authenticate(account);
+            await authService.Authorize(user);
             return Ok();
         }
     }

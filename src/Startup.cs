@@ -1,8 +1,10 @@
 namespace Codecool.PeerMentors
 {
+    using System.Threading.Tasks;
     using Codecool.PeerMentors.DbContexts;
     using Codecool.PeerMentors.Entities;
     using Codecool.PeerMentors.Services;
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -28,6 +30,8 @@ namespace Codecool.PeerMentors
             services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<PeerMentorDbContext>();
 
+            SetAuthentication(services);
+
             services.AddControllers();
 
             services.AddScoped<IAuthService, AuthService>();
@@ -51,6 +55,7 @@ namespace Codecool.PeerMentors
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -68,6 +73,21 @@ namespace Codecool.PeerMentors
 
             services.AddDbContext<PeerMentorDbContext>(options =>
                 options.UseNpgsql($"Host={dbHost};Database={dbName};Username={dbUsername};Password={dbPassword}"));
+        }
+
+        private void SetAuthentication(IServiceCollection services)
+        {
+            services
+                .ConfigureApplicationCookie(options =>
+                {
+                    options.Events.OnRedirectToLogin = context =>
+                    {
+                        context.Response.StatusCode = 401;
+                        return Task.CompletedTask;
+                    };
+                })
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
         }
     }
 }
