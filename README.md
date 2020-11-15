@@ -8,6 +8,7 @@ The back-end repository of Codecool's IRL coding challenge's Peer Mentoring appl
 - Entity Framework Core 3.1
   - ASP.NET Core Identity (3.1)
   - PostgreSQL (3.1) provider
+- Google Auth
 
 ## Setup
 

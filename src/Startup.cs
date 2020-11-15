@@ -2,6 +2,7 @@ namespace Codecool.PeerMentors
 {
     using Codecool.PeerMentors.DbContexts;
     using Codecool.PeerMentors.Entities;
+    using Codecool.PeerMentors.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,8 @@ namespace Codecool.PeerMentors
                     .AddEntityFrameworkStores<PeerMentorDbContext>();
 
             services.AddControllers();
+
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +40,12 @@ namespace Codecool.PeerMentors
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(options =>
+                options.AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials()
+                       .SetIsOriginAllowed((_) => true));
 
             app.UseHttpsRedirection();
 
