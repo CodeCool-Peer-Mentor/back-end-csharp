@@ -25,5 +25,11 @@ namespace Codecool.PeerMentors.Controllers
             await authService.Authorize(user);
             return Ok();
         }
+
+        [HttpGet("authentication")]
+        public IActionResult AuthCheck()
+        {
+            return Ok();
+        }
     }
 }
