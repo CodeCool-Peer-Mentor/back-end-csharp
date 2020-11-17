@@ -15,6 +15,8 @@
 
         public DbSet<UserTechnology> UserTechonologies { get; set; }
 
+        public DbSet<Project> Projects { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,6 +39,16 @@
                 .WithOne(u => u.Technology);
             modelBuilder.Entity<UserTechnology>()
                 .Property(ut => ut.InsertedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Project>()
+                .HasIndex(p => p.Name)
+                .IsUnique();
+            modelBuilder.Entity<Project>()
+                .Property(p => p.Name)
+                .IsRequired();
+            modelBuilder.Entity<Project>()
+                .Property(p => p.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
