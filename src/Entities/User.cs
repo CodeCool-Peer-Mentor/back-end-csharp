@@ -21,5 +21,7 @@ namespace Codecool.PeerMentors.Entities
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public List<UserTechnology> Technologies { get; set; }
     }
 }

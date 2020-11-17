@@ -1,6 +1,7 @@
 namespace Codecool.PeerMentors.Entities
 {
     using System;
+    using System.Collections.Generic;
     using DTO = Codecool.PeerMentors.DTOs.Technology;
 
     public class Technology
@@ -12,6 +13,8 @@ namespace Codecool.PeerMentors.Entities
         public DateTime InsertedAt { get; set; }
 
         public User AddedBy { get; set; }
+
+        public List<UserTechnology> User { get; set; }
 
         public static Technology From(DTO dto, User author)
         {

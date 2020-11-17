@@ -13,6 +13,8 @@
 
         public DbSet<Technology> Techonologies { get; set; }
 
+        public DbSet<UserTechnology> UserTechonologies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -25,6 +27,16 @@
                 .IsRequired();
             modelBuilder.Entity<Technology>()
                 .Property(t => t.InsertedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Technologies)
+                .WithOne(t => t.User);
+            modelBuilder.Entity<Technology>()
+                .HasMany(t => t.User)
+                .WithOne(u => u.Technology);
+            modelBuilder.Entity<UserTechnology>()
+                .Property(ut => ut.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
