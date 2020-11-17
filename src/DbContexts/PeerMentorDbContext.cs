@@ -17,6 +17,8 @@
 
         public DbSet<Project> Projects { get; set; }
 
+        public DbSet<UserProject> UserProjects { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -49,6 +51,16 @@
                 .IsRequired();
             modelBuilder.Entity<Project>()
                 .Property(p => p.InsertedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Projects)
+                .WithOne(t => t.User);
+            modelBuilder.Entity<Project>()
+                .HasMany(t => t.Users)
+                .WithOne(u => u.Project);
+            modelBuilder.Entity<UserProject>()
+                .Property(ut => ut.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }

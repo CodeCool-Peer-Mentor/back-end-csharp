@@ -1,6 +1,7 @@
 namespace Codecool.PeerMentors.Entities
 {
     using System;
+    using System.Collections.Generic;
 
     public class Project
     {
@@ -11,6 +12,8 @@ namespace Codecool.PeerMentors.Entities
         public DateTime InsertedAt { get; set; }
 
         public User AddedBy { get; set; }
+
+        public List<UserProject> Users { get; set; }
 
         public static Project From(DTOs.Project dto, User author)
         {

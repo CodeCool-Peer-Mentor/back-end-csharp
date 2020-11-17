@@ -10,6 +10,7 @@ namespace Codecool.PeerMentors.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using TechnologyDTO = Codecool.PeerMentors.DTOs.Technology;
+    using ProjectDTO = Codecool.PeerMentors.DTOs.Project;
 
     public class UserController : ControllerBase
     {
@@ -31,11 +32,18 @@ namespace Codecool.PeerMentors.Controllers
                 .Include(ut => ut.Technology)
                 .Where(ut => ut.User.Id == user.Id)
                 .ToListAsync();
+            List<Project> allProjects = await context.Projects.ToListAsync();
+            List<UserProject> userProjects = await context.UserProjects
+                .Include(up => up.Project)
+                .Where(ut => ut.User.Id == user.Id)
+                .ToListAsync();
 
             return new ProfileSettings()
             {
                 AllTechnologyTags = allTechnologies.Select(t => TechnologyDTO.From(t)),
+                AllProjectTags = allProjects.Select(p => ProjectDTO.From(p)),
                 TechnologyTags = userTechnologies.Select(ut => TechnologyDTO.From(ut.Technology)),
+                ProjectTags = userProjects.Select(up => ProjectDTO.From(up.Project)),
             };
         }
 
@@ -75,6 +83,46 @@ namespace Codecool.PeerMentors.Controllers
             }
 
             context.Remove(userTechnology);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost("tags/add-project-tag")]
+        public async Task<IActionResult> AddProject([FromBody] ProjectDTO project)
+        {
+            Project dbProject = await context.Projects
+                .SingleOrDefaultAsync(t => t.Name == project.Name);
+            if (dbProject == null)
+            {
+                return BadRequest();
+            }
+
+            User user = await userManager.GetUserAsync(User);
+            UserProject userProject = await context.UserProjects
+                .SingleOrDefaultAsync(up => up.User.Id == user.Id
+                    && up.Project.Name == project.Name);
+            if (userProject == null)
+            {
+                context.Add(new UserProject(user, dbProject));
+                await context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("tags/remove-project-tag")]
+        public async Task<IActionResult> RemoveProject([FromBody] ProjectDTO project)
+        {
+            User user = await userManager.GetUserAsync(User);
+            UserProject userProject = await context.UserProjects
+                .SingleOrDefaultAsync(up => up.User.Id == user.Id
+                    && up.Project.Name == project.Name);
+            if (userProject == null)
+            {
+                return BadRequest();
+            }
+
+            context.Remove(userProject);
             await context.SaveChangesAsync();
             return Ok();
         }
