@@ -4,6 +4,7 @@ namespace Codecool.PeerMentors.Controllers
     using System.Linq;
     using System.Threading.Tasks;
     using Codecool.PeerMentors.DbContexts;
+    using Codecool.PeerMentors.DTOs.Requests;
     using Codecool.PeerMentors.DTOs.Responses;
     using Codecool.PeerMentors.Entities;
     using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,18 @@ namespace Codecool.PeerMentors.Controllers
                 TechnologyTags = userTechnologies.Select(ut => TechnologyDTO.From(ut.Tag)),
                 ProjectTags = userProjects.Select(up => ProjectDTO.From(up.Tag)),
             };
+        }
+
+        [HttpPost("save-personal-data")]
+        public async Task Update([FromBody] SettingsUser editedUser)
+        {
+            User user = await context.Users.SingleAsync(u => u.Email == User.Identity.Name);
+            user.FirstName = editedUser.FirstName;
+            user.LastName = editedUser.LastName;
+            user.Country = editedUser.Country;
+            user.City = editedUser.City;
+            user.Module = editedUser.Module;
+            await context.SaveChangesAsync();
         }
     }
 }
