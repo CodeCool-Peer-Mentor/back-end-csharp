@@ -9,6 +9,7 @@ namespace Codecool.PeerMentors.Controllers
     using Codecool.PeerMentors.Entities;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using DiscordUserDTO = Codecool.PeerMentors.DTOs.Requests.DiscordUser;
     using ProjectDTO = Codecool.PeerMentors.DTOs.Project;
     using TechnologyDTO = Codecool.PeerMentors.DTOs.Technology;
 
@@ -25,7 +26,9 @@ namespace Codecool.PeerMentors.Controllers
         [HttpGet("get-user-data")]
         public async Task<ProfileSettings> GetSettings()
         {
-            User user = await context.Users.SingleAsync(u => u.Email == User.Identity.Name);
+            User user = await context.Users
+                .Include(u => u.Discord)
+                .SingleAsync(u => u.Email == User.Identity.Name);
             List<Technology> allTechnologies = await context.Techonologies.ToListAsync();
             List<UserTechnology> userTechnologies = await context.UserTechonologies
                 .Include(ut => ut.Tag)
@@ -55,6 +58,14 @@ namespace Codecool.PeerMentors.Controllers
             user.Country = editedUser.Country;
             user.City = editedUser.City;
             user.Module = editedUser.Module;
+            await context.SaveChangesAsync();
+        }
+
+        [HttpPost("discord")]
+        public async Task AddDiscord([FromBody] DiscordUserDTO discordUser)
+        {
+            User user = await context.Users.SingleAsync(u => u.Email == User.Identity.Name);
+            user.Discord = new Entities.DiscordUser(discordUser, user);
             await context.SaveChangesAsync();
         }
     }

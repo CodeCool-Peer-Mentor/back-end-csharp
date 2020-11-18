@@ -28,6 +28,8 @@ namespace Codecool.PeerMentors.Entities
 
         public string Module { get; set; }
 
+        public DiscordUser Discord { get; set; }
+
         public List<UserTechnology> Technologies { get; set; }
 
         public List<UserProject> Projects { get; set; }

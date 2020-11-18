@@ -11,6 +11,7 @@ namespace Codecool.PeerMentors.DTOs.Responses
             Country = user.Country;
             City = user.City;
             Module = user.Module;
+            DiscordUsername = user.Discord?.Username;
         }
 
         public string FirstName { get; set; }
