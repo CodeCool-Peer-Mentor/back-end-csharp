@@ -4,6 +4,15 @@ namespace Codecool.PeerMentors.DTOs.Responses
 
     public class ProfileSettings
     {
+        public ProfileSettings(Entities.User user)
+        {
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Country = user.Country;
+            City = user.City;
+            Module = user.Module;
+        }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

@@ -36,7 +36,7 @@ namespace Codecool.PeerMentors.Controllers
                 .Where(ut => ut.User.Id == user.Id)
                 .ToListAsync();
 
-            return new ProfileSettings()
+            return new ProfileSettings(user)
             {
                 AllTechnologyTags = allTechnologies.Select(t => TechnologyDTO.From(t)),
                 AllProjectTags = allProjects.Select(p => ProjectDTO.From(p)),
