@@ -38,7 +38,7 @@
                 .WithOne(t => t.User);
             modelBuilder.Entity<Technology>()
                 .HasMany(t => t.User)
-                .WithOne(u => u.Technology);
+                .WithOne(u => u.Tag);
             modelBuilder.Entity<UserTechnology>()
                 .Property(ut => ut.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -58,7 +58,7 @@
                 .WithOne(t => t.User);
             modelBuilder.Entity<Project>()
                 .HasMany(t => t.Users)
-                .WithOne(u => u.Project);
+                .WithOne(u => u.Tag);
             modelBuilder.Entity<UserProject>()
                 .Property(ut => ut.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");

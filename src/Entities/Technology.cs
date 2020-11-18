@@ -4,11 +4,9 @@ namespace Codecool.PeerMentors.Entities
     using System.Collections.Generic;
     using DTO = Codecool.PeerMentors.DTOs.Technology;
 
-    public class Technology
+    public class Technology : Tag
     {
         public int ID { get; set; }
-
-        public string Name { get; set; }
 
         public DateTime InsertedAt { get; set; }
 

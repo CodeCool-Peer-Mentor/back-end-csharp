@@ -2,7 +2,7 @@ namespace Codecool.PeerMentors.DTOs
 {
     using System.Text.Json.Serialization;
 
-    public class Project
+    public class Project : ITag
     {
         public int ID { get; set; }
 

@@ -3,11 +3,9 @@ namespace Codecool.PeerMentors.Entities
     using System;
     using System.Collections.Generic;
 
-    public class Project
+    public class Project : Tag
     {
         public int ID { get; set; }
-
-        public string Name { get; set; }
 
         public DateTime InsertedAt { get; set; }
 

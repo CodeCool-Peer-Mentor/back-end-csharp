@@ -2,24 +2,11 @@ namespace Codecool.PeerMentors.Entities
 {
     using System;
 
-    public class UserProject
+    public class UserProject : UserTag<Project>
     {
-        public UserProject(User user, Project project)
-        {
-            User = user;
-            Project = project;
-        }
-
-        private UserProject()
+        public UserProject()
+            : base()
         {
         }
-
-        public int ID { get; set; }
-
-        public User User { get; set; }
-
-        public Project Project { get; set; }
-
-        public DateTime InsertedAt { get; set; }
     }
 }
