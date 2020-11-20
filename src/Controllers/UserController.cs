@@ -68,5 +68,29 @@ namespace Codecool.PeerMentors.Controllers
             user.Discord = new Entities.DiscordUser(discordUser, user);
             await context.SaveChangesAsync();
         }
+
+        [HttpGet("get-user-data/{id}")]
+        public async Task<IActionResult> GetBy(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest();
+            }
+
+            User user = await context.Users
+                .Include(u => u.Projects)
+                .ThenInclude(up => up.Tag)
+                .Include(u => u.Technologies)
+                .ThenInclude(ut => ut.Tag)
+                .Include(u => u.Discord)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new PublicMentorPage(user));
+        }
     }
 }
