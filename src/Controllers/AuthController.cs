@@ -31,5 +31,11 @@ namespace Codecool.PeerMentors.Controllers
         {
             return Ok();
         }
+
+        [HttpGet("logout")]
+        public Task SignOut()
+        {
+            return authService.SignOut();
+        }
     }
 }

@@ -55,5 +55,7 @@ namespace Codecool.PeerMentors.Services
 
             await signInManager.SignInAsync(user, isPersistent: true);
         }
+
+        public Task SignOut() => signInManager.SignOutAsync();
     }
 }

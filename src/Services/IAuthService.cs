@@ -9,5 +9,7 @@ namespace Codecool.PeerMentors.Services
         Task<User> Authenticate(GoogleUser user);
 
         Task Authorize(User user);
+
+        Task SignOut();
     }
 }
