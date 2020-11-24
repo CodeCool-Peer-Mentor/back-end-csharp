@@ -19,6 +19,10 @@
 
         public DbSet<UserProject> UserProjects { get; set; }
 
+        public DbSet<Question> Questions { get; set; }
+
+        public DbSet<QuestionTechnology> QuestionTechnologies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -62,6 +66,19 @@
             modelBuilder.Entity<UserProject>()
                 .Property(ut => ut.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<User>()
+                .HasMany(user => user.Questions)
+                .WithOne(question => question.Author);
+            modelBuilder.Entity<Question>()
+                .Property(question => question.InsertedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Technologies)
+                .WithOne(qt => qt.Question);
+            modelBuilder.Entity<Technology>()
+                .HasMany(t => t.Questions)
+                .WithOne(qt => qt.Technology);
         }
     }
 }
