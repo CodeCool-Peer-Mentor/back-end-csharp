@@ -52,6 +52,7 @@ namespace Codecool.PeerMentors.Controllers
             Entities.User user = await userManager.GetUserAsync(User);
             Entities.Question dbQuestion = await context.Questions
                 .Include(q => q.Author)
+                .Include(q => q.Votes)
                 .Include(q => q.Technologies)
                 .ThenInclude(qt => qt.Technology)
                 .SingleOrDefaultAsync(q => q.ID == id);
@@ -63,6 +64,7 @@ namespace Codecool.PeerMentors.Controllers
             Question question = new Question(dbQuestion)
             {
                 CanEdit = user.Id == dbQuestion.Author.Id,
+                HasVoted = dbQuestion.Votes.Count(v => v.Voter.Id == user.Id) % 2 == 1,
             };
             return Ok(new DetailedQuestion(question));
         }

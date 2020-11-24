@@ -19,6 +19,7 @@ namespace Codecool.PeerMentors.DTOs.Responses
                 AuthorName = $"{entity.Author.FirstName} {entity.Author.LastName}";
             }
 
+            VoteCount = entity.Votes.Sum(v => v.Value);
             Technologies = entity.Technologies.Select(qt => Technology.From(qt.Technology));
             AutheredAt = entity.InsertedAt;
         }
@@ -41,6 +42,12 @@ namespace Codecool.PeerMentors.DTOs.Responses
 
         [JsonPropertyName("myQuestion")]
         public bool CanEdit { get; set; }
+
+        [JsonPropertyName("vote")]
+        public int VoteCount { get; }
+
+        [JsonPropertyName("voted")]
+        public bool HasVoted { get; set; }
 
         [JsonPropertyName("technologyTags")]
         public IEnumerable<Technology> Technologies { get; }

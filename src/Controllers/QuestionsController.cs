@@ -25,6 +25,7 @@ namespace Codecool.PeerMentors.Controllers
                 .Include(q => q.Author)
                 .Include(q => q.Technologies)
                 .ThenInclude(qt => qt.Technology)
+                .Include(q => q.Votes)
                 .OrderByDescending(q => q.InsertedAt)
                 .ToListAsync();
             return questions.Select(q => new QuestionDTO(q));

@@ -23,6 +23,8 @@
 
         public DbSet<QuestionTechnology> QuestionTechnologies { get; set; }
 
+        public DbSet<QuestionVote> QuestionVotes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -79,6 +81,16 @@
             modelBuilder.Entity<Technology>()
                 .HasMany(t => t.Questions)
                 .WithOne(qt => qt.Technology);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.QuestionVotes)
+                .WithOne(qv => qv.Voter);
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Votes)
+                .WithOne(qv => qv.Question);
+            modelBuilder.Entity<QuestionVote>()
+                .Property(qv => qv.InsertedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
 }
