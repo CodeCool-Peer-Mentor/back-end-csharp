@@ -22,11 +22,11 @@ namespace Codecool.PeerMentors.Entities
 
         [Required]
         [StringLength(255, MinimumLength = 2)]
-        public string Title { get; private set; }
+        public string Title { get; set; }
 
         [Required]
         [StringLength(9999, MinimumLength = 3)]
-        public string Body { get; private set; }
+        public string Body { get; set; }
 
         public bool IsAnonymous { get; private set; }
 

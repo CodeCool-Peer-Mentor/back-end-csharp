@@ -39,6 +39,9 @@ namespace Codecool.PeerMentors.DTOs.Responses
         [JsonPropertyName("anonym")]
         public bool IsAnonymous { get; }
 
+        [JsonPropertyName("myQuestion")]
+        public bool CanEdit { get; set; }
+
         [JsonPropertyName("technologyTags")]
         public IEnumerable<Technology> Technologies { get; }
 

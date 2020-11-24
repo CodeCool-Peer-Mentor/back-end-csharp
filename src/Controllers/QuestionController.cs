@@ -50,17 +50,44 @@ namespace Codecool.PeerMentors.Controllers
         public async Task<IActionResult> Get(int id)
         {
             Entities.User user = await userManager.GetUserAsync(User);
-            Entities.Question question = await context.Questions
+            Entities.Question dbQuestion = await context.Questions
                 .Include(q => q.Author)
                 .Include(q => q.Technologies)
                 .ThenInclude(qt => qt.Technology)
+                .SingleOrDefaultAsync(q => q.ID == id);
+            if (dbQuestion == null)
+            {
+                return NotFound();
+            }
+
+            Question question = new Question(dbQuestion)
+            {
+                CanEdit = user.Id == dbQuestion.Author.Id,
+            };
+            return Ok(new DetailedQuestion(question));
+        }
+
+        [HttpPost("edit/{id}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] DTOs.Requests.EditedQuestion dto)
+        {
+            Entities.Question question = await context.Questions
+                .Include(q => q.Author)
                 .SingleOrDefaultAsync(q => q.ID == id);
             if (question == null)
             {
                 return NotFound();
             }
 
-            return Ok(new DetailedQuestion(new Question(question)));
+            Entities.User user = await userManager.GetUserAsync(User);
+            if (question.Author.Id != user.Id)
+            {
+                return Forbid();
+            }
+
+            question.Title = dto.Title;
+            question.Body = dto.Body;
+            await context.SaveChangesAsync();
+            return Ok();
         }
     }
 }
