@@ -4,8 +4,10 @@ namespace Codecool.PeerMentors.Controllers
     using System.Linq;
     using System.Threading.Tasks;
     using Codecool.PeerMentors.DbContexts;
+    using Codecool.PeerMentors.DTOs.Responses;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     [Route("[controller]")]
     public class QuestionController : ControllerBase
@@ -42,6 +44,23 @@ namespace Codecool.PeerMentors.Controllers
                 t => new Entities.QuestionTechnology(question, t)));
             await context.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            Entities.User user = await userManager.GetUserAsync(User);
+            Entities.Question question = await context.Questions
+                .Include(q => q.Author)
+                .Include(q => q.Technologies)
+                .ThenInclude(qt => qt.Technology)
+                .SingleOrDefaultAsync(q => q.ID == id);
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new DetailedQuestion(new Question(question)));
         }
     }
 }
