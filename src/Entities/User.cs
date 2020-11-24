@@ -33,5 +33,9 @@ namespace Codecool.PeerMentors.Entities
         public List<UserTechnology> Technologies { get; set; }
 
         public List<UserProject> Projects { get; set; }
+
+        public List<Question> Questions { get; set; }
+
+        public List<QuestionVote> QuestionVotes { get; set; }
     }
 }

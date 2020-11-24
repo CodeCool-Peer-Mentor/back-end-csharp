@@ -3,15 +3,17 @@ using System;
 using Codecool.PeerMentors.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Codecool.PeerMentors.Migrations
 {
     [DbContext(typeof(PeerMentorDbContext))]
-    partial class PeerMentorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201124190109_AddQuestionsTable")]
+    partial class AddQuestionsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,37 +128,6 @@ namespace Codecool.PeerMentors.Migrations
                     b.HasIndex("TechnologyID");
 
                     b.ToTable("QuestionTechnologies");
-                });
-
-            modelBuilder.Entity("Codecool.PeerMentors.Entities.QuestionVote", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("InsertedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("QuestionID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("VoterId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("QuestionID");
-
-                    b.HasIndex("VoterId");
-
-                    b.ToTable("QuestionVotes");
                 });
 
             modelBuilder.Entity("Codecool.PeerMentors.Entities.Technology", b =>
@@ -485,21 +456,6 @@ namespace Codecool.PeerMentors.Migrations
                     b.HasOne("Codecool.PeerMentors.Entities.Technology", "Technology")
                         .WithMany("Questions")
                         .HasForeignKey("TechnologyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Codecool.PeerMentors.Entities.QuestionVote", b =>
-                {
-                    b.HasOne("Codecool.PeerMentors.Entities.Question", "Question")
-                        .WithMany("Votes")
-                        .HasForeignKey("QuestionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Codecool.PeerMentors.Entities.User", "Voter")
-                        .WithMany("QuestionVotes")
-                        .HasForeignKey("VoterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

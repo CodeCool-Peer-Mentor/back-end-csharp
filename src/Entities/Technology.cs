@@ -14,6 +14,8 @@ namespace Codecool.PeerMentors.Entities
 
         public List<UserTechnology> User { get; set; }
 
+        public List<QuestionTechnology> Questions { get; }
+
         public static Technology From(DTO dto, User author)
         {
             return new Technology
