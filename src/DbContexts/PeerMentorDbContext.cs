@@ -25,6 +25,8 @@
 
         public DbSet<QuestionVote> QuestionVotes { get; set; }
 
+        public DbSet<Answer> Answers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -90,6 +92,16 @@
                 .WithOne(qv => qv.Question);
             modelBuilder.Entity<QuestionVote>()
                 .Property(qv => qv.InsertedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Answers)
+                .WithOne(a => a.Author);
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Answers)
+                .WithOne(a => a.Question);
+            modelBuilder.Entity<Answer>()
+                .Property(a => a.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }

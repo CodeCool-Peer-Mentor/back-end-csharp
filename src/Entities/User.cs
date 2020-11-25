@@ -36,6 +36,8 @@ namespace Codecool.PeerMentors.Entities
 
         public List<Question> Questions { get; set; }
 
+        public List<Answer> Answers { get; set; }
+
         public List<QuestionVote> QuestionVotes { get; set; }
     }
 }

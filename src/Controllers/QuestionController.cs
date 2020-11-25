@@ -55,6 +55,8 @@ namespace Codecool.PeerMentors.Controllers
                 .Include(q => q.Votes)
                 .Include(q => q.Technologies)
                 .ThenInclude(qt => qt.Technology)
+                .Include(q => q.Answers)
+                .ThenInclude(a => a.Author)
                 .SingleOrDefaultAsync(q => q.ID == id);
             if (dbQuestion == null)
             {
@@ -66,7 +68,12 @@ namespace Codecool.PeerMentors.Controllers
                 CanEdit = user.Id == dbQuestion.Author.Id,
                 HasVoted = dbQuestion.Votes.Count(v => v.Voter.Id == user.Id) % 2 == 1,
             };
-            return Ok(new DetailedQuestion(question));
+            IEnumerable<Answer> answers = dbQuestion.Answers
+                .Select(a => new Answer(a)
+                {
+                    IsMyAnswer = a.Author.Id == user.Id,
+                });
+            return Ok(new DetailedQuestion(question, answers));
         }
 
         [HttpPost("edit/{id}")]
