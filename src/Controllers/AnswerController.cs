@@ -36,5 +36,27 @@ namespace Codecool.PeerMentors.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPost("answers/edit/{id}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] DTOs.Requests.EditedAnswer dto)
+        {
+            Entities.Answer answer = await context.Answers
+                .Include(q => q.Author)
+                .SingleOrDefaultAsync(q => q.ID == id);
+            if (answer == null)
+            {
+                return NotFound();
+            }
+
+            Entities.User user = await userManager.GetUserAsync(User);
+            if (answer.Author.Id != user.Id)
+            {
+                return Forbid();
+            }
+
+            answer.Body = dto.Body;
+            await context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

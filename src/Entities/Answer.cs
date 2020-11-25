@@ -20,7 +20,7 @@ namespace Codecool.PeerMentors.Entities
 
         [Required]
         [StringLength(9999, MinimumLength = 2)]
-        public string Body { get; private set; }
+        public string Body { get; set; }
 
         [Required]
         public User Author { get; private set; }
