@@ -52,6 +52,8 @@ namespace Codecool.PeerMentors.DTOs.Responses
         [JsonPropertyName("technologyTags")]
         public IEnumerable<Technology> Technologies { get; }
 
+        public List<Answer> Answers { get; }
+
         [JsonPropertyName("submissionTime")]
         public DateTime AutheredAt { get; }
     }
