@@ -37,6 +37,8 @@ namespace Codecool.PeerMentors.Entities
 
         public List<QuestionVote> Votes { get; private set; }
 
+        public List<Answer> Answers { get; private set; }
+
         [Required]
         public DateTime InsertedAt { get; private set; }
     }
