@@ -7,6 +7,7 @@ namespace Codecool.PeerMentors.Controllers
     using Codecool.PeerMentors.DTOs.Requests;
     using Codecool.PeerMentors.DTOs.Responses;
     using Codecool.PeerMentors.Entities;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using DiscordUserDTO = Codecool.PeerMentors.DTOs.Requests.DiscordUser;
@@ -17,9 +18,11 @@ namespace Codecool.PeerMentors.Controllers
     public class UserController : ControllerBase
     {
         private readonly PeerMentorDbContext context;
+        private readonly UserManager<User> userManager;
 
-        public UserController(PeerMentorDbContext context)
+        public UserController(PeerMentorDbContext context, UserManager<User> userManager)
         {
+            this.userManager = userManager;
             this.context = context;
         }
 
@@ -91,6 +94,22 @@ namespace Codecool.PeerMentors.Controllers
             }
 
             return Ok(new PublicMentorPage(user));
+        }
+
+        [HttpGet("get-user-private-page")]
+        public async Task<PrivateUser> GetPrivateInfo()
+        {
+            User user = await userManager.GetUserAsync(User);
+            user.Questions = await context.Questions
+                .Include(q => q.Author)
+                .Where(q => q.Author.Id == user.Id)
+                .ToListAsync();
+            user.Answers = await context.Answers
+                .Include(a => a.Author)
+                .Include(a => a.Question)
+                .Where(a => a.Author.Id == user.Id)
+                .ToListAsync();
+            return new PrivateUser(user);
         }
     }
 }
