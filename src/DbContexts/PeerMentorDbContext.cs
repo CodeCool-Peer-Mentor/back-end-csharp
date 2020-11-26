@@ -27,6 +27,8 @@
 
         public DbSet<Answer> Answers { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -101,6 +103,13 @@
                 .HasMany(q => q.Answers)
                 .WithOne(a => a.Question);
             modelBuilder.Entity<Answer>()
+                .Property(a => a.InsertedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Reviews)
+                .WithOne(r => r.Reviewer);
+            modelBuilder.Entity<Review>()
                 .Property(a => a.InsertedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
